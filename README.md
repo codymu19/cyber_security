@@ -1,2 +1,2 @@
 # cyber_security
-Repository for cyber security
+Repository for intro to cybersecurity
