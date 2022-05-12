@@ -2,11 +2,16 @@
 
 let userName = "";
 let password = "";
+let phonenumber = "";
 let verifypassword = "";
 let passwordRegEx=/((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!]).{6,40})/;
 
 function setusername(){
     userName = $("#username").val();
+}
+
+function setphonenumber(){
+    phonenumber = $("#phonenumber").val();
 }
 
 function setuserpassword(){
@@ -38,7 +43,7 @@ function checkexpiredtoken(token){
     usertoken = localStorage.getItem("token");
     $.ajax({
        type: 'GET',
-        url: '/validate/'+token,
+        url: 'https://dev.stedi.me/validate/'+token,
         data: JSON.stringify({usertoken}),
         success: function(data){savetoken(data)},
         contentType: "application/text",
@@ -46,9 +51,19 @@ function checkexpiredtoken(token){
     }
 }
 
+function sendtext(){
+    setphonenumber();
+
+    $.ajax({
+        type: 'POST',
+         url: 'https://dev.stedi.me/twofactorlogin/'+phonenumber,
+         contentType: 'application/text',
+         dataType: 'text' })
+}
+
 function userlogin(){
     setuserpassword();
-    setusername();
+    setphonenumber();
     $.ajax({
         type: 'POST',
         url: 'https://dev.stedi.me/login',
@@ -92,7 +107,7 @@ function createbutton(){
 function createuser(){
     $.ajax({
         type: 'POST',
-        url: '/user',
+        url: 'https://dev.stedi.me/user',
         data: JSON.stringify({userName, 'email': userName, password, 'verifyPassword': vpwd, 'accountType':'Personal'}),//we are using the email as the user name
         success: function(data) { alert(data);
 //        readonlyforms("newUser");
@@ -106,7 +121,7 @@ function createuser(){
 function getstephistory(){
       $.ajax({
             type: 'POST',
-            url: '/stephistory',
+            url: 'https://dev.stedi.me/=/stephistory',
             data: JSON.stringify({userName}),
             success: function(data) { alert(data);
             json = $.parseJSON(data);
